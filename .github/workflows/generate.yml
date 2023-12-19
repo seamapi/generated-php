@@ -3,7 +3,7 @@ name: Generate PHP SDK
 on:
   push:
     branches:
-      - main
+      - fix-npm-registry-url
 
 jobs:
   generate-php-sdk:
@@ -18,25 +18,9 @@ jobs:
         with:
           node-version: '18'
 
+      - name: Print .npmrc content
+        run: cat .npmrc || echo ".npmrc not found"
+
       - name: Install dependencies
         run: npm ci --registry=https://registry.npmjs.org/
 
-      - name: Check for 'autorelease' keyword in commit messages
-        run: |
-          if git log --format=%B -n 1 ${{ github.sha }} | grep -q 'autorelease'; then
-            echo "Generating PHP SDK..."
-          else
-            echo "No 'autorelease' keyword found. Skipping PHP SDK generation."
-            exit 0
-          fi
-
-      - name: Generate PHP SDK
-        run: npm run generate
-
-      - name: Commit Generated PHP SDK
-        run: |
-          git config --local user.email "actions@github.com"
-          git config --local user.name "GitHub Actions"
-          git add ./src
-          git commit -m "Generate PHP SDK" || echo "No changes to commit"
-          git push
