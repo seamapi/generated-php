@@ -13,13 +13,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Check for 'autorelease' keyword in commit messages
+        id: check_keyword
+        run: |
+          if git log -1 --pretty=%B | grep -iq 'autorelease'; then
+            echo "autorelease keyword found, proceeding with workflow"
+            echo "RELEASE_NEEDED=true" >> $GITHUB_ENV
+          else
+            echo "autorelease keyword not found, ending workflow"
+            echo "RELEASE_NEEDED=false" >> $GITHUB_ENV
+            exit 0
+          fi
+
       - name: Setup Node.js
+        if: env.RELEASE_NEEDED == 'true'
         uses: actions/setup-node@v2
         with:
           node-version: '18'
 
       - name: Install dependencies
+        if: env.RELEASE_NEEDED == 'true'
         run: npm ci
 
+      - name: Generate PHP SDK
+        if: env.RELEASE_NEEDED == 'true'
+        run: npm run generate
+
+      - name: Commit Generated PHP SDK
+        if: env.RELEASE_NEEDED == 'true'
+        run: |
+          git config --local user.email "actions@github.com"
+          git config --local user.name "GitHub Actions"
+          git add -A
+          git diff --staged --quiet || git commit -m "Generate PHP SDK"
+          git push
 
 
