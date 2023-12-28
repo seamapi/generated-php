@@ -3,7 +3,7 @@ name: Generate PHP SDK
 on:
   push:
     branches:
-      - fix-npm-registry-url
+      - main
 
 jobs:
   generate-php-sdk:
