@@ -9,14 +9,14 @@ final class SmokeTest extends TestCase
 {
   public function testGetDevices(): void
   {
-    $seam = Fixture::getTestSeamClient();
+    $seam = Fixture::getTestServer();
 
     $devices_response = $seam->devices->list();
     $this->assertIsString($devices_response[0]->device_id);
   }
   public function testCreateAccessCode(): void
   {
-    $seam = Fixture::getTestSeamClient();
+    $seam = Fixture::getTestServer();
 
     $access_code = $seam->access_codes->create(
       device_id:"august_device_1", code:"1234"
