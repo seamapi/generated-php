@@ -11,14 +11,14 @@ class AccessCode
             return null;
         }
         return new self(
-            common_code_key: $json->common_code_key,
+            common_code_key: $json->common_code_key ?? null,
             is_scheduled_on_device: $json->is_scheduled_on_device ?? null,
             type: $json->type,
             is_waiting_for_code_assignment: $json->is_waiting_for_code_assignment ?? null,
             access_code_id: $json->access_code_id,
             device_id: $json->device_id,
-            name: $json->name,
-            code: $json->code,
+            name: $json->name ?? null,
+            code: $json->code ?? null,
             created_at: $json->created_at,
             errors: $json->errors ?? null,
             warnings: $json->warnings ?? null,
@@ -38,14 +38,14 @@ class AccessCode
 
     
     public function __construct(
-        public string $common_code_key,
+        public string | null $common_code_key,
         public bool | null $is_scheduled_on_device,
         public string $type,
         public bool | null $is_waiting_for_code_assignment,
         public string $access_code_id,
         public string $device_id,
-        public string $name,
-        public string $code,
+        public string | null $name,
+        public string | null $code,
         public string $created_at,
         public mixed $errors,
         public mixed $warnings,

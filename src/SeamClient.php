@@ -993,12 +993,16 @@ class ConnectWebviewsClient
   }
 
   public function list(
-    string $user_identifier_key = null
+    string $user_identifier_key = null,
+    mixed $custom_metadata_has = null
   ): array {
     $request_payload = [];
 
     if ($user_identifier_key !== null) {
       $request_payload["user_identifier_key"] = $user_identifier_key;
+    }
+    if ($custom_metadata_has !== null) {
+      $request_payload["custom_metadata_has"] = $custom_metadata_has;
     }
 
     $res = $this->seam->request(
@@ -1083,11 +1087,13 @@ class ConnectedAccountsClient
   }
 
   public function list(
-    
+    mixed $custom_metadata_has = null
   ): array {
     $request_payload = [];
 
-
+    if ($custom_metadata_has !== null) {
+      $request_payload["custom_metadata_has"] = $custom_metadata_has;
+    }
 
     $res = $this->seam->request(
       "POST",
@@ -1105,7 +1111,8 @@ class ConnectedAccountsClient
 
   public function update(
     string $connected_account_id,
-    bool $automatically_manage_new_devices = null
+    bool $automatically_manage_new_devices = null,
+    mixed $custom_metadata = null
   ): ConnectedAccount {
     $request_payload = [];
 
@@ -1114,6 +1121,9 @@ class ConnectedAccountsClient
     }
     if ($automatically_manage_new_devices !== null) {
       $request_payload["automatically_manage_new_devices"] = $automatically_manage_new_devices;
+    }
+    if ($custom_metadata !== null) {
+      $request_payload["custom_metadata"] = $custom_metadata;
     }
 
     $res = $this->seam->request(
@@ -1279,7 +1289,6 @@ class DevicesClient
     string $device_id,
     mixed $properties = null,
     string $name = null,
-    mixed $location = null,
     bool $is_managed = null
   ): void {
     $request_payload = [];
@@ -1292,9 +1301,6 @@ class DevicesClient
     }
     if ($name !== null) {
       $request_payload["name"] = $name;
-    }
-    if ($location !== null) {
-      $request_payload["location"] = $location;
     }
     if ($is_managed !== null) {
       $request_payload["is_managed"] = $is_managed;
@@ -2053,6 +2059,7 @@ class UserIdentitiesClient
   public function create(
     string $user_identity_key = null,
     string $email_address = null,
+    string $phone_number = null,
     string $full_name = null
   ): void {
     $request_payload = [];
@@ -2062,6 +2069,9 @@ class UserIdentitiesClient
     }
     if ($email_address !== null) {
       $request_payload["email_address"] = $email_address;
+    }
+    if ($phone_number !== null) {
+      $request_payload["phone_number"] = $phone_number;
     }
     if ($full_name !== null) {
       $request_payload["full_name"] = $full_name;
@@ -2168,6 +2178,29 @@ class UserIdentitiesClient
     $this->seam->request(
       "POST",
       "/user_identities/list_accessible_devices",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
+  public function list_acs_systems(
+    string $user_identity_id
+  ): void {
+    $request_payload = [];
+
+    if ($user_identity_id !== null) {
+      $request_payload["user_identity_id"] = $user_identity_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/user_identities/list_acs_systems",
       json: $request_payload,
       
     );
@@ -3105,7 +3138,8 @@ class AcsCredentialsClient
 
   public function list(
     string $acs_user_id = null,
-    string $acs_system_id = null
+    string $acs_system_id = null,
+    string $user_identity_id = null
   ): void {
     $request_payload = [];
 
@@ -3114,6 +3148,9 @@ class AcsCredentialsClient
     }
     if ($acs_system_id !== null) {
       $request_payload["acs_system_id"] = $acs_system_id;
+    }
+    if ($user_identity_id !== null) {
+      $request_payload["user_identity_id"] = $user_identity_id;
     }
 
     $this->seam->request(
@@ -3445,12 +3482,20 @@ class AcsUsersClient
 
   public function list(
     string $user_identity_id = null,
+    string $user_identity_phone_number = null,
+    string $user_identity_email_address = null,
     string $acs_system_id = null
   ): void {
     $request_payload = [];
 
     if ($user_identity_id !== null) {
       $request_payload["user_identity_id"] = $user_identity_id;
+    }
+    if ($user_identity_phone_number !== null) {
+      $request_payload["user_identity_phone_number"] = $user_identity_phone_number;
+    }
+    if ($user_identity_email_address !== null) {
+      $request_payload["user_identity_email_address"] = $user_identity_email_address;
     }
     if ($acs_system_id !== null) {
       $request_payload["acs_system_id"] = $acs_system_id;
@@ -3459,6 +3504,29 @@ class AcsUsersClient
     $this->seam->request(
       "POST",
       "/acs/users/list",
+      json: $request_payload,
+      
+    );
+
+
+
+
+
+
+  }
+
+  public function list_accessible_entrances(
+    string $acs_user_id
+  ): void {
+    $request_payload = [];
+
+    if ($acs_user_id !== null) {
+      $request_payload["acs_user_id"] = $acs_user_id;
+    }
+
+    $this->seam->request(
+      "POST",
+      "/acs/users/list_accessible_entrances",
       json: $request_payload,
       
     );

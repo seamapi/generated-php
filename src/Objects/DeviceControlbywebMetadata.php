@@ -13,7 +13,7 @@ class DeviceControlbywebMetadata
         return new self(
             device_id: $json->device_id,
             device_name: $json->device_name,
-            relay_name: $json->relay_name,
+            relay_name: $json->relay_name ?? null,
         );
     }
   
@@ -22,7 +22,7 @@ class DeviceControlbywebMetadata
     public function __construct(
         public string $device_id,
         public string $device_name,
-        public string $relay_name,
+        public string | null $relay_name,
     ) {
     }
   

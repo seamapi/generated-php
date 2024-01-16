@@ -12,7 +12,7 @@ class ClientSession
         }
         return new self(
             client_session_id: $json->client_session_id,
-            user_identifier_key: $json->user_identifier_key,
+            user_identifier_key: $json->user_identifier_key ?? null,
             created_at: $json->created_at,
             token: $json->token,
             device_count: $json->device_count,
@@ -27,7 +27,7 @@ class ClientSession
     
     public function __construct(
         public string $client_session_id,
-        public string $user_identifier_key,
+        public string | null $user_identifier_key,
         public string $created_at,
         public string $token,
         public float $device_count,

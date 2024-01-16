@@ -15,7 +15,7 @@ class Device
             device_type: $json->device_type,
             capabilities_supported: $json->capabilities_supported,
             properties: DeviceProperties::from_json($json->properties),
-            location: DeviceLocation::from_json($json->location),
+            location: isset($json->location) ? DeviceLocation::from_json($json->location) : null,
             connected_account_id: $json->connected_account_id,
             workspace_id: $json->workspace_id,
             errors: array_map(
@@ -38,7 +38,7 @@ class Device
         public string $device_type,
         public array $capabilities_supported,
         public DeviceProperties $properties,
-        public DeviceLocation $location,
+        public DeviceLocation | null $location,
         public string $connected_account_id,
         public string $workspace_id,
         public array $errors,

@@ -23,13 +23,13 @@ class ConnectWebview
             created_at: $json->created_at,
             login_successful: $json->login_successful,
             status: $json->status,
-            custom_redirect_url: $json->custom_redirect_url,
-            custom_redirect_failure_url: $json->custom_redirect_failure_url,
+            custom_redirect_url: $json->custom_redirect_url ?? null,
+            custom_redirect_failure_url: $json->custom_redirect_failure_url ?? null,
             custom_metadata: $json->custom_metadata,
             automatically_manage_new_devices: $json->automatically_manage_new_devices,
             wait_for_device_creation: $json->wait_for_device_creation,
-            authorized_at: $json->authorized_at,
-            selected_provider: $json->selected_provider,
+            authorized_at: $json->authorized_at ?? null,
+            selected_provider: $json->selected_provider ?? null,
         );
     }
   
@@ -48,13 +48,13 @@ class ConnectWebview
         public string $created_at,
         public bool $login_successful,
         public string $status,
-        public string $custom_redirect_url,
-        public string $custom_redirect_failure_url,
+        public string | null $custom_redirect_url,
+        public string | null $custom_redirect_failure_url,
         public mixed $custom_metadata,
         public bool $automatically_manage_new_devices,
         public bool $wait_for_device_creation,
-        public string $authorized_at,
-        public string $selected_provider,
+        public string | null $authorized_at,
+        public string | null $selected_provider,
     ) {
     }
   

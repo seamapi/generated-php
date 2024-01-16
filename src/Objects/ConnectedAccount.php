@@ -13,7 +13,7 @@ class ConnectedAccount
         return new self(
             connected_account_id: $json->connected_account_id ?? null,
             created_at: $json->created_at ?? null,
-            user_identifier: ConnectedAccountUserIdentifier::from_json($json->user_identifier) ?? null,
+            user_identifier: isset($json->user_identifier) ? ConnectedAccountUserIdentifier::from_json($json->user_identifier) : null,
             account_type: $json->account_type ?? null,
             account_type_display_name: $json->account_type_display_name,
             errors: $json->errors ?? null,

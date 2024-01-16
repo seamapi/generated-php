@@ -17,7 +17,7 @@ class UnmanagedDeviceProperties
             image_url: $json->image_url ?? null,
             image_alt_text: $json->image_alt_text ?? null,
             battery_level: $json->battery_level ?? null,
-            battery: UnmanagedDeviceBattery::from_json($json->battery) ?? null,
+            battery: isset($json->battery) ? UnmanagedDeviceBattery::from_json($json->battery) : null,
             online_access_codes_enabled: $json->online_access_codes_enabled ?? null,
             offline_access_codes_enabled: $json->offline_access_codes_enabled ?? null,
             model: UnmanagedDeviceModel::from_json($json->model),

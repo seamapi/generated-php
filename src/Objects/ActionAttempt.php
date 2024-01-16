@@ -15,7 +15,7 @@ class ActionAttempt
             action_type: $json->action_type ?? null,
             action_attempt_id: $json->action_attempt_id ?? null,
             result: $json->result ?? null,
-            error: ActionAttemptError::from_json($json->error) ?? null,
+            error: isset($json->error) ? ActionAttemptError::from_json($json->error) : null,
         );
     }
   
