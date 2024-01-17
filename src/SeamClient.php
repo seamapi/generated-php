@@ -98,7 +98,7 @@ class SeamClient
 
     // TODO handle request errors
     $response = $this->client->request($method, $path, $options);
-    $statusCode = $response->getStatusCode();
+    $status_code = $response->getStatusCode();
 
     $res_json = null;
     try {
@@ -119,9 +119,11 @@ class SeamClient
       );
     }
 
-    if ($statusCode >= 400) {
+    if ($status_code >= 400) {
+      $error_message = $response->getReasonPhrase();
+
       throw new Exception(
-        "HTTP Error: [" . $statusCode . "] " . $method . " " . $path
+        "HTTP Error: " . $error_message . " [" . $status_code . "] " . $method . " " . $path
       );
     }
 
@@ -145,13 +147,13 @@ class SeamClient
 class AccessCodesClient
 {
   private SeamClient $seam;
-    public AccessCodesSimulateClient $simulate;
+  public AccessCodesSimulateClient $simulate;
   public AccessCodesUnmanagedClient $unmanaged;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
     $this->simulate = new AccessCodesSimulateClient($seam);
-$this->unmanaged = new AccessCodesUnmanagedClient($seam);
+    $this->unmanaged = new AccessCodesUnmanagedClient($seam);
   }
 
 
@@ -351,8 +353,6 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     );
 
     return $action_attempt;
-
-
   }
 
   public function generate_code(
@@ -557,20 +557,16 @@ $this->unmanaged = new AccessCodesUnmanagedClient($seam);
     );
 
     return $action_attempt;
-
-
   }
-
 }
 
 class ActionAttemptsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -649,11 +645,10 @@ class ActionAttemptsClient
 class ClientSessionsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -709,14 +704,8 @@ class ClientSessionsClient
       "POST",
       "/client_sessions/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -814,14 +803,8 @@ class ClientSessionsClient
       "POST",
       "/client_sessions/grant_access",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -872,26 +855,18 @@ class ClientSessionsClient
       "POST",
       "/client_sessions/revoke",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class ConnectWebviewsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -959,14 +934,8 @@ class ConnectWebviewsClient
       "POST",
       "/connect_webviews/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -1018,17 +987,15 @@ class ConnectWebviewsClient
 
     return array_map(fn ($r) => ConnectWebview::from_json($r), $res);
   }
-
 }
 
 class ConnectedAccountsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -1049,14 +1016,8 @@ class ConnectedAccountsClient
       "POST",
       "/connected_accounts/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -1139,13 +1100,12 @@ class ConnectedAccountsClient
 
     return ConnectedAccount::from_json($res);
   }
-
 }
 
 class DevicesClient
 {
   private SeamClient $seam;
-    public DevicesUnmanagedClient $unmanaged;
+  public DevicesUnmanagedClient $unmanaged;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
@@ -1166,14 +1126,8 @@ class DevicesClient
       "POST",
       "/devices/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -1310,26 +1264,18 @@ class DevicesClient
       "POST",
       "/devices/update",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class EventsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -1418,13 +1364,12 @@ class EventsClient
 
     return array_map(fn ($r) => Event::from_json($r), $res);
   }
-
 }
 
 class HealthClient
 {
   private SeamClient $seam;
-    public HealthServiceClient $service;
+  public HealthServiceClient $service;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
@@ -1445,26 +1390,18 @@ class HealthClient
       "POST",
       "/health/get_service_health",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class LocksClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -1584,8 +1521,6 @@ class LocksClient
     );
 
     return $action_attempt;
-
-
   }
 
   public function unlock_door(
@@ -1618,20 +1553,16 @@ class LocksClient
     );
 
     return $action_attempt;
-
-
   }
-
 }
 
 class NetworksClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -1648,19 +1579,12 @@ class NetworksClient
       "POST",
       "/networks/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
-  public function list(
-    
-  ): void {
+  public function list(): void
+  {
     $request_payload = [];
 
 
@@ -1669,22 +1593,15 @@ class NetworksClient
       "POST",
       "/networks/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class PhonesClient
 {
   private SeamClient $seam;
-    public PhonesSimulateClient $simulate;
+  public PhonesSimulateClient $simulate;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
@@ -1714,13 +1631,12 @@ class PhonesClient
 
     return array_map(fn ($r) => Phone::from_json($r), $res);
   }
-
 }
 
 class ThermostatsClient
 {
   private SeamClient $seam;
-    public ThermostatsClimateSettingSchedulesClient $climate_setting_schedules;
+  public ThermostatsClimateSettingSchedulesClient $climate_setting_schedules;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
@@ -1753,14 +1669,8 @@ class ThermostatsClient
       "POST",
       "/thermostats/cool",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -1815,14 +1725,8 @@ class ThermostatsClient
       "POST",
       "/thermostats/heat",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function heat_cool(
@@ -1858,14 +1762,8 @@ class ThermostatsClient
       "POST",
       "/thermostats/heat_cool",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -1944,14 +1842,8 @@ class ThermostatsClient
       "POST",
       "/thermostats/off",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function set_fan_mode(
@@ -1979,14 +1871,8 @@ class ThermostatsClient
       "POST",
       "/thermostats/set_fan_mode",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function update(
@@ -2006,22 +1892,15 @@ class ThermostatsClient
       "POST",
       "/thermostats/update",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class UserIdentitiesClient
 {
   private SeamClient $seam;
-    public UserIdentitiesEnrollmentAutomationsClient $enrollment_automations;
+  public UserIdentitiesEnrollmentAutomationsClient $enrollment_automations;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
@@ -2046,14 +1925,8 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/add_acs_user",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function create(
@@ -2081,14 +1954,8 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/create",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -2108,14 +1975,8 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function grant_access_to_device(
@@ -2135,19 +1996,12 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/grant_access_to_device",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
-  public function list(
-    
-  ): void {
+  public function list(): void
+  {
     $request_payload = [];
 
 
@@ -2158,12 +2012,6 @@ class UserIdentitiesClient
       json: $request_payload,
       inner_object: "user_identities",
     );
-
-
-
-
-
-
   }
 
   public function list_accessible_devices(
@@ -2179,14 +2027,8 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/list_accessible_devices",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list_acs_systems(
@@ -2202,14 +2044,8 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/list_acs_systems",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list_acs_users(
@@ -2225,14 +2061,8 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/list_acs_users",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function remove_acs_user(
@@ -2252,14 +2082,8 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/remove_acs_user",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function revoke_access_to_device(
@@ -2279,26 +2103,18 @@ class UserIdentitiesClient
       "POST",
       "/user_identities/revoke_access_to_device",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class WebhooksClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -2342,14 +2158,8 @@ class WebhooksClient
       "POST",
       "/webhooks/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -2375,9 +2185,8 @@ class WebhooksClient
     return Webhook::from_json($res);
   }
 
-  public function list(
-    
-  ): array {
+  public function list(): array
+  {
     $request_payload = [];
 
 
@@ -2395,17 +2204,15 @@ class WebhooksClient
 
     return array_map(fn ($r) => Webhook::from_json($r), $res);
   }
-
 }
 
 class WorkspacesClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -2438,19 +2245,12 @@ class WorkspacesClient
       "POST",
       "/workspaces/create",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
-  public function get(
-    
-  ): Workspace {
+  public function get(): Workspace
+  {
     $request_payload = [];
 
 
@@ -2469,9 +2269,8 @@ class WorkspacesClient
     return Workspace::from_json($res);
   }
 
-  public function list(
-    
-  ): array {
+  public function list(): array
+  {
     $request_payload = [];
 
 
@@ -2490,9 +2289,8 @@ class WorkspacesClient
     return array_map(fn ($r) => Workspace::from_json($r), $res);
   }
 
-  public function reset_sandbox(
-    
-  ): void {
+  public function reset_sandbox(): void
+  {
     $request_payload = [];
 
 
@@ -2503,24 +2301,16 @@ class WorkspacesClient
       json: $request_payload,
       inner_object: "message",
     );
-
-
-
-
-
-
   }
-
 }
 
 class AccessCodesSimulateClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -2554,17 +2344,15 @@ class AccessCodesSimulateClient
 
     return UnmanagedAccessCode::from_json($res);
   }
-
 }
 
 class AccessCodesUnmanagedClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -2597,14 +2385,8 @@ class AccessCodesUnmanagedClient
       "POST",
       "/access_codes/unmanaged/convert_to_managed",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function delete(
@@ -2637,8 +2419,6 @@ class AccessCodesUnmanagedClient
     );
 
     return $action_attempt;
-
-
   }
 
   public function get(
@@ -2728,26 +2508,18 @@ class AccessCodesUnmanagedClient
       "POST",
       "/access_codes/unmanaged/update",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class AcsAccessGroupsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -2768,14 +2540,8 @@ class AcsAccessGroupsClient
       "POST",
       "/acs/access_groups/add_user",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -2791,14 +2557,8 @@ class AcsAccessGroupsClient
       "POST",
       "/acs/access_groups/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -2818,14 +2578,8 @@ class AcsAccessGroupsClient
       "POST",
       "/acs/access_groups/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list_users(
@@ -2841,14 +2595,8 @@ class AcsAccessGroupsClient
       "POST",
       "/acs/access_groups/list_users",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function remove_user(
@@ -2868,22 +2616,15 @@ class AcsAccessGroupsClient
       "POST",
       "/acs/access_groups/remove_user",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class AcsClient
 {
   private SeamClient $seam;
-    public AcsAccessGroupsClient $access_groups;
+  public AcsAccessGroupsClient $access_groups;
   public AcsCredentialPoolsClient $credential_pools;
   public AcsCredentialProvisioningAutomationsClient $credential_provisioning_automations;
   public AcsCredentialsClient $credentials;
@@ -2894,25 +2635,22 @@ class AcsClient
   {
     $this->seam = $seam;
     $this->access_groups = new AcsAccessGroupsClient($seam);
-$this->credential_pools = new AcsCredentialPoolsClient($seam);
-$this->credential_provisioning_automations = new AcsCredentialProvisioningAutomationsClient($seam);
-$this->credentials = new AcsCredentialsClient($seam);
-$this->entrances = new AcsEntrancesClient($seam);
-$this->systems = new AcsSystemsClient($seam);
-$this->users = new AcsUsersClient($seam);
+    $this->credential_pools = new AcsCredentialPoolsClient($seam);
+    $this->credential_provisioning_automations = new AcsCredentialProvisioningAutomationsClient($seam);
+    $this->credentials = new AcsCredentialsClient($seam);
+    $this->entrances = new AcsEntrancesClient($seam);
+    $this->systems = new AcsSystemsClient($seam);
+    $this->users = new AcsUsersClient($seam);
   }
-
-
 }
 
 class AcsCredentialPoolsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -2929,26 +2667,18 @@ class AcsCredentialPoolsClient
       "POST",
       "/acs/credential_pools/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class AcsCredentialProvisioningAutomationsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -2981,26 +2711,18 @@ class AcsCredentialProvisioningAutomationsClient
       "POST",
       "/acs/credential_provisioning_automations/launch",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class AcsCredentialsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -3021,14 +2743,8 @@ class AcsCredentialsClient
       "POST",
       "/acs/credentials/assign",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function create(
@@ -3080,14 +2796,8 @@ class AcsCredentialsClient
       "POST",
       "/acs/credentials/create",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function delete(
@@ -3103,14 +2813,8 @@ class AcsCredentialsClient
       "POST",
       "/acs/credentials/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -3126,14 +2830,8 @@ class AcsCredentialsClient
       "POST",
       "/acs/credentials/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -3157,14 +2855,8 @@ class AcsCredentialsClient
       "POST",
       "/acs/credentials/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function unassign(
@@ -3184,14 +2876,8 @@ class AcsCredentialsClient
       "POST",
       "/acs/credentials/unassign",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function update(
@@ -3211,26 +2897,18 @@ class AcsCredentialsClient
       "POST",
       "/acs/credentials/update",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class AcsEntrancesClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -3247,14 +2925,8 @@ class AcsEntrancesClient
       "POST",
       "/acs/entrances/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function grant_access(
@@ -3274,14 +2946,8 @@ class AcsEntrancesClient
       "POST",
       "/acs/entrances/grant_access",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -3301,26 +2967,18 @@ class AcsEntrancesClient
       "POST",
       "/acs/entrances/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class AcsSystemsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -3337,14 +2995,8 @@ class AcsSystemsClient
       "POST",
       "/acs/systems/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -3360,26 +3012,18 @@ class AcsSystemsClient
       "POST",
       "/acs/systems/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class AcsUsersClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -3424,14 +3068,8 @@ class AcsUsersClient
       "POST",
       "/acs/users/create",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function delete(
@@ -3447,14 +3085,8 @@ class AcsUsersClient
       "POST",
       "/acs/users/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -3470,14 +3102,8 @@ class AcsUsersClient
       "POST",
       "/acs/users/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -3505,14 +3131,8 @@ class AcsUsersClient
       "POST",
       "/acs/users/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list_accessible_entrances(
@@ -3528,14 +3148,8 @@ class AcsUsersClient
       "POST",
       "/acs/users/list_accessible_entrances",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function suspend(
@@ -3551,14 +3165,8 @@ class AcsUsersClient
       "POST",
       "/acs/users/suspend",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function unsuspend(
@@ -3574,14 +3182,8 @@ class AcsUsersClient
       "POST",
       "/acs/users/unsuspend",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function update(
@@ -3621,26 +3223,18 @@ class AcsUsersClient
       "POST",
       "/acs/users/update",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class DevicesUnmanagedClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -3747,26 +3341,18 @@ class DevicesUnmanagedClient
       "POST",
       "/devices/unmanaged/update",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class HealthServiceClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -3783,26 +3369,18 @@ class HealthServiceClient
       "POST",
       "/health/service/[service_name]",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class NoiseSensorsNoiseThresholdsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -3856,8 +3434,6 @@ class NoiseSensorsNoiseThresholdsClient
     );
 
     return $action_attempt;
-
-
   }
 
   public function delete(
@@ -3894,8 +3470,6 @@ class NoiseSensorsNoiseThresholdsClient
     );
 
     return $action_attempt;
-
-
   }
 
   public function get(
@@ -4002,35 +3576,29 @@ class NoiseSensorsNoiseThresholdsClient
     );
 
     return $action_attempt;
-
-
   }
-
 }
 
 class NoiseSensorsClient
 {
   private SeamClient $seam;
-    public NoiseSensorsNoiseThresholdsClient $noise_thresholds;
+  public NoiseSensorsNoiseThresholdsClient $noise_thresholds;
   public NoiseSensorsSimulateClient $simulate;
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
     $this->noise_thresholds = new NoiseSensorsNoiseThresholdsClient($seam);
-$this->simulate = new NoiseSensorsSimulateClient($seam);
+    $this->simulate = new NoiseSensorsSimulateClient($seam);
   }
-
-
 }
 
 class NoiseSensorsSimulateClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -4047,26 +3615,18 @@ class NoiseSensorsSimulateClient
       "POST",
       "/noise_sensors/simulate/trigger_noise_threshold",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
 
 class PhonesSimulateClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -4108,17 +3668,15 @@ class PhonesSimulateClient
 
     return Phone::from_json($res);
   }
-
 }
 
 class ThermostatsClimateSettingSchedulesClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -4206,14 +3764,8 @@ class ThermostatsClimateSettingSchedulesClient
       "POST",
       "/thermostats/climate_setting_schedules/delete",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function get(
@@ -4340,17 +3892,15 @@ class ThermostatsClimateSettingSchedulesClient
 
     return ClimateSettingSchedule::from_json($res);
   }
-
 }
 
 class UserIdentitiesEnrollmentAutomationsClient
 {
   private SeamClient $seam;
-  
+
   public function __construct(SeamClient $seam)
   {
     $this->seam = $seam;
-    
   }
 
 
@@ -4367,14 +3917,8 @@ class UserIdentitiesEnrollmentAutomationsClient
       "POST",
       "/user_identities/enrollment_automations/get",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function launch(
@@ -4406,14 +3950,8 @@ class UserIdentitiesEnrollmentAutomationsClient
       "POST",
       "/user_identities/enrollment_automations/launch",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
 
   public function list(
@@ -4429,14 +3967,7 @@ class UserIdentitiesEnrollmentAutomationsClient
       "POST",
       "/user_identities/enrollment_automations/list",
       json: $request_payload,
-      
+
     );
-
-
-
-
-
-
   }
-
 }
